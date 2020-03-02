@@ -120,7 +120,7 @@ metadata:
         }
       ]
     capabilities: Basic Install
-  name: sonatypenxrm-operator.v0.0.0
+  name: nxrm-operator-certified.v0.0.0
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -130,17 +130,17 @@ spec:
   install:
     spec:
       deployments:
-      - name: sonatypenxrm-operator
+      - name: nxrm-operator-certified
         spec:
           replicas: 1
           selector:
             matchLabels:
-              name: sonatypenxrm-operator
+              name: nxrm-operator-certified
           strategy: {}
           template:
             metadata:
               labels:
-                name: sonatypenxrm-operator
+                name: nxrm-operator-certified
             spec:
               containers:
               - env:
@@ -153,14 +153,14 @@ spec:
                     fieldRef:
                       fieldPath: metadata.name
                 - name: OPERATOR_NAME
-                  value: sonatypenxrm-operator
+                  value: nxrm-operator-certified
                 - name: RELATED_IMAGE_NEXUS
                   value: registry.connect.redhat.com/sonatype/nexus-repository-manager:3.20.1-01-ubi-3
                 image: REPLACE_IMAGE
                 imagePullPolicy: Always
-                name: sonatypenxrm-operator
+                name: nxrm-operator-certified
                 resources: {}
-              serviceAccountName: sonatypenxrm-operator
+              serviceAccountName: nxrm-operator-certified
       permissions:
       - rules:
         - apiGroups:
@@ -226,7 +226,7 @@ spec:
         - apiGroups:
           - apps
           resourceNames:
-          - sonatypenxrm-operator
+          - nxrm-operator-certified
           resources:
           - deployments/finalizers
           verbs:
@@ -256,7 +256,7 @@ spec:
           - patch
           - update
           - watch
-        serviceAccountName: sonatypenxrm-operator
+        serviceAccountName: nxrm-operator-certified
     strategy: deployment
   installModes:
   - supported: true

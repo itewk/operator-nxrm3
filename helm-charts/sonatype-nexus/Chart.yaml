@@ -15,12 +15,8 @@ keywords:
 - repository-manager
 - nexus3
 maintainers:
-- email: apowell@sonatype.com
-  name: adrianpowell
-- email: jflinchbaugh@sonatype.com
-  name: jflinchbaugh
-- email: cfernau@sonatype.com
-  name: fernau
+- email:  cloud-ops@sonatype.com
+  name: Sonatype
 name: sonatype-nexus
 sources:
 - https://github.com/sonatype/nexus-public

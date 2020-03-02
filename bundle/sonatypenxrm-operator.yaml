@@ -1,4 +1,4 @@
-packageName: sonatypenxrm-operator
+packageName: nxrm-operator-certified
 channels:
   - name: alpha
-    currentCSV: sonatypenxrm-operator.v0.0.0
+    currentCSV: nxrm-operator-certified.v0.0.0

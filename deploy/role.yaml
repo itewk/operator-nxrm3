@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   creationTimestamp: null
-  name: sonatypenxrm-operator
+  name: nxrm-operator-certified
 rules:
 - apiGroups:
   - ""
@@ -67,7 +67,7 @@ rules:
 - apiGroups:
   - apps
   resourceNames:
-  - sonatypenxrm-operator
+  - nxrm-operator-certified
   resources:
   - deployments/finalizers
   verbs:
