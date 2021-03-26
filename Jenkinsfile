@@ -12,6 +12,7 @@ properties([
     booleanParam(defaultValue: false, description: 'Force Red Hat Certified Build for a non-master branch', name: 'force_red_hat_build'),
     booleanParam(defaultValue: false, description: 'Skip Red Hat Certified Build', name: 'skip_red_hat_build'),
     string(defaultValue: '', description: 'Override automatic version assignment', name: 'version')
+    string(defaultValue: '1', description: 'Serial number for bundle image', name: 'bundle_number')
   ])
 ])
 
@@ -41,11 +42,15 @@ node('ubuntu-zion') {
   }
 
   stage('Build') {
-    OsTools.runSafe(this, 'scripts/bundle.sh')
+    withCredentials([
+      string(credentialsId: 'operator-bundle-nxrm-rh--project-id', variable: 'PROJECT_ID'),
+      string(credentialsId: 'rh-build-service-api-key', variable: 'API_KEY')]) {
+      OsTools.runSafe(this, "scripts/bundle.sh params.bundle_number ${PROJECT_ID} ${API_KEY}")
+    }
   }
 
   stage('Archive') {
-      archiveArtifacts artifacts: archiveName, onlyIfSuccessful: true
+    archiveArtifacts artifacts: archiveName, onlyIfSuccessful: true
   }
 }
 
