@@ -3,7 +3,7 @@
  * Includes the third-party code listed at http://links.sonatype.com/products/nexus/attributions.
  * "Sonatype" is a trademark of Sonatype, Inc.
  */
-@Library(['private-pipeline-library', 'jenkins-shared']) _
+@Library(['private-pipeline-library', 'jenkins-shared', 'int-jenkins-shared']) _
 import com.sonatype.jenkins.pipeline.GitHub
 import com.sonatype.jenkins.pipeline.OsTools
 
@@ -16,10 +16,11 @@ properties([
   ])
 ])
 
-def imageName = 'docker-all.repo.sonatype.com/operator-framework/upstream-registry-builder'
+final imageName = 'docker-all.repo.sonatype.com/operator-framework/upstream-registry-builder'
 
-def version, isMaster
-def organization = 'sonatype'
+def version
+def isMaster
+final organization = 'sonatype'
 
 dockerizedBuildPipeline(
   prepare: {
@@ -33,10 +34,9 @@ dockerizedBuildPipeline(
   onSuccess: {
     buildNotifications(currentBuild, env, 'master')
   },
-
   onFailure: {
     buildNotifications(currentBuild, env, 'master')
-  }
+  },
 )
 
 def readVersion() {
