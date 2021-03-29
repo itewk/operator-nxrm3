@@ -21,6 +21,7 @@ def isMaster
 final organization = 'sonatype'
 
 dockerizedBuildPipeline(
+  buildImageId: 'docker-all.repo.sonatype.com/operator-framework/upstream-registry-builder'
   prepare: {
     githubStatusUpdate('pending')
   },
