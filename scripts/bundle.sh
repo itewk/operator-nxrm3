@@ -58,15 +58,15 @@ LABEL com.redhat.delivery.operator.bundle=true
 EOF
 
 # build the bundle docker image
-docker build . \
+podman build . \
        -f bundle-$latest_version.Dockerfile \
        -t nxrm-operator-bundle:$latest_version
 
-docker tag \
+podman tag \
        nxrm-operator-bundle:$latest_version \
        scan.connect.redhat.com/${projectId}/nxrm-operator-bundle:${latest_version}-${bundleNumber}
 
 # push to red hat scan service
-echo $apiKey | docker login -u unused --password-stdin scan.connect.redhat.com
-docker push \
+echo $apiKey | podman login -u unused --password-stdin scan.connect.redhat.com
+podman push \
        scan.connect.redhat.com/${projectId}/nxrm-operator-bundle:${latest_version}-${bundleNumber}
