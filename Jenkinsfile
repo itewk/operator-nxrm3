@@ -16,8 +16,6 @@ properties([
   ])
 ])
 
-final imageName = 'docker-all.repo.sonatype.com/operator-framework/upstream-registry-builder'
-
 def version
 def isMaster
 final organization = 'sonatype'
