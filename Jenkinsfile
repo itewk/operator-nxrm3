@@ -30,6 +30,7 @@ dockerizedBuildPipeline(
   },
   buildAndTest: {
   },
+  skipVulnerabilityScan: true,
   onSuccess: {
     buildNotifications(currentBuild, env, 'master')
   },
