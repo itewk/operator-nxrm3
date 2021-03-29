@@ -16,33 +16,43 @@ properties([
   ])
 ])
 
-def version
-def isMaster
-final organization = 'sonatype'
+node('ubuntu-zion') {
+  def version, isMaster
+  def organization = 'sonatype'
+  def archiveName = 'nxrm-operator-certified-metadata.zip'
 
-dockerizedBuildPipeline(
-  buildImageId: 'docker-all.repo.sonatype.com/operator-framework/upstream-registry-builder',
-  prepare: {
-    githubStatusUpdate('pending')
-  },
-  setVersion: {
+  stage('Preparation') {
+    deleteDir()
+
+    def checkoutDetails = checkout scm
+
+    isMaster = checkoutDetails.GIT_BRANCH in ['origin/master', 'master']
+
     version = params.version ?: readVersion()
-  },
-  buildAndTest: {
+  }
+
+  stage('Trigger Red Hat Certified Image Build') {
+    if ((! params.skip_red_hat_build) && (isMaster || params.force_red_hat_build)) {
+      withCredentials([
+          string(credentialsId: 'operator-nxrm-rh-build-project-id', variable: 'PROJECT_ID'),
+          string(credentialsId: 'rh-build-service-api-key', variable: 'API_KEY')]) {
+        runGroovy('ci/TriggerRedHatBuild.groovy', "'${version}' '${PROJECT_ID}' '${API_KEY}'")
+      }
+    }
+  }
+
+  stage('Build') {
     withCredentials([
       string(credentialsId: 'operator-bundle-nxrm-rh-project-id', variable: 'PROJECT_ID'),
       string(credentialsId: 'rh-build-service-api-key', variable: 'API_KEY')]) {
       OsTools.runSafe(this, "scripts/bundle.sh ${params.bundle_number} ${PROJECT_ID} ${API_KEY}")
     }
-  },
-  skipVulnerabilityScan: true,
-  onSuccess: {
-    buildNotifications(currentBuild, env, 'master')
-  },
-  onFailure: {
-    buildNotifications(currentBuild, env, 'master')
-  },
-)
+  }
+
+  stage('Archive') {
+    archiveArtifacts artifacts: archiveName, onlyIfSuccessful: true
+  }
+}
 
 def readVersion() {
   def content = readFile 'build/Dockerfile'
