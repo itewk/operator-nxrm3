@@ -17,6 +17,8 @@ bundleNumber=$1
 projectId=$2
 apiKey=$3
 
+OPM='opm'
+
 set -e -x
 
 # stage a clean bundle directory
@@ -47,7 +49,7 @@ if [ "x$latest_version" = "x" ]; then
     exit 1
 fi
 
-opm alpha bundle generate -d $latest_version -u $latest_version
+$OPM alpha bundle generate -d $latest_version -u $latest_version
 mv bundle.Dockerfile bundle-$latest_version.Dockerfile
 
 # append more labels
@@ -56,17 +58,3 @@ LABEL com.redhat.openshift.versions="v4.5,v4.6"
 LABEL com.redhat.delivery.backport=true
 LABEL com.redhat.delivery.operator.bundle=true
 EOF
-
-# build the bundle docker image
-podman build . \
-       -f bundle-$latest_version.Dockerfile \
-       -t nxrm-operator-bundle:$latest_version
-
-podman tag \
-       nxrm-operator-bundle:$latest_version \
-       scan.connect.redhat.com/${projectId}/nxrm-operator-bundle:${latest_version}-${bundleNumber}
-
-# push to red hat scan service
-echo $apiKey | podman login -u unused --password-stdin scan.connect.redhat.com
-podman push \
-       scan.connect.redhat.com/${projectId}/nxrm-operator-bundle:${latest_version}-${bundleNumber}
