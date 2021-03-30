@@ -31,8 +31,8 @@ dockerizedBuildPipeline(
   buildAndTest: {
     withCredentials([
       string(credentialsId: 'operator-bundle-nxrm-rh-project-id', variable: 'PROJECT_ID'),
-      string(credentialsId: 'rh-build-service-api-key', variable: 'API_KEY')]) {
-      OsTools.runSafe(this, "scripts/bundle.sh ${params.bundle_number} ${PROJECT_ID} ${API_KEY}")
+      string(credentialsId: 'rh-docker-registry-key', variable: 'KEY')]) {
+      OsTools.runSafe(this, "scripts/bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}")
     }
   },
   skipVulnerabilityScan: true,
@@ -42,8 +42,8 @@ dockerizedBuildPipeline(
   deploy: {
     withCredentials([
       string(credentialsId: 'operator-bundle-nxrm-rh-project-id', variable: 'PROJECT_ID'),
-      string(credentialsId: 'rh-build-service-api-key', variable: 'API_KEY')]) {
-      OsTools.runSafe(this, "scripts/deploy_bundle.sh ${params.bundle_number} ${PROJECT_ID} ${API_KEY}")
+      string(credentialsId: 'rh-docker-registry-key', variable: 'KEY')]) {
+      OsTools.runSafe(this, "scripts/deploy_bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}")
     }
   },
   onSuccess: {
