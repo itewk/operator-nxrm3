@@ -29,8 +29,9 @@ dockerizedBuildPipeline(
   },
   buildAndTest: {
     withCredentials([
-      string(credentialsId: 'operator-bundle-nxrm-rh-project-id', variable: 'PROJECT_ID'),
-      string(credentialsId: 'rh-docker-registry-key', variable: 'KEY')]) {
+      usernamePassword(credentialsId: 'operator-bundle-nxrm-redhat-pid-key' ,
+                       usernameVariable: 'PROJECT_ID',
+                       passwordVariable: 'KEY')]) {
       runSafely "scripts/bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}"
     }
   },
@@ -40,9 +41,9 @@ dockerizedBuildPipeline(
   },
   deploy: {
     withCredentials([
-      string(credentialsId: 'operator-bundle-nxrm-rh-project-id', variable: 'PROJECT_ID'),
-      string(credentialsId: 'rh-docker-registry-key', variable: 'KEY'),
-    ]) {
+      usernamePassword(credentialsId: 'operator-bundle-nxrm-redhat-pid-key' ,
+                       usernameVariable: 'PROJECT_ID',
+                       passwordVariable: 'KEY')]) {
       runSafely "scripts/deploy_bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}"
     }
   },
