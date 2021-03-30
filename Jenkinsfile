@@ -41,7 +41,10 @@ dockerizedBuildPipeline(
   deploy: {
     withCredentials([
       string(credentialsId: 'operator-bundle-nxrm-rh-project-id', variable: 'PROJECT_ID'),
-      string(credentialsId: 'rh-docker-registry-key', variable: 'KEY')]) {
+      string(credentialsId: 'rh-docker-registry-key', variable: 'KEY'),
+      string(credentialsId: 'rh-docker-registry-key', variable: 'JENKINS_DOCKER_USERNAME'),
+      string(credentialsId: 'rh-docker-registry-key', variable: 'JENKINS_DOCKER_PASSWORD'),
+    ]) {
       runSafely "scripts/deploy_bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}"
     }
   },
