@@ -19,13 +19,24 @@ apiKey=$3
 
 set -e -x
 
+cd bundle;
+
+latest_version=$(cat nxrm-operator-certified.package.yaml \
+                     | grep currentCSV: \
+                     | sed 's/.*nxrm-operator-certified.v//')
+
+if [ "x$latest_version" = "x" ]; then
+    echo "Could not determine latest version from package yaml."
+    exit 1
+fi
+
 # build the bundle docker image
 docker build . \
-       -f bundle-$latest_version.Dockerfile \
-       -t nxrm-operator-bundle:$latest_version
+       -f bundle-${latest_version}.Dockerfile \
+       -t nxrm-operator-bundle:${latest_version}
 
 docker tag \
-       nxrm-operator-bundle:$latest_version \
+       nxrm-operator-bundle:${latest_version} \
        scan.connect.redhat.com/${projectId}/nxrm-operator-bundle:${latest_version}-${bundleNumber}
 
 # push to red hat scan service
