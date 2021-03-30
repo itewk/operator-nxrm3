@@ -38,7 +38,7 @@ dockerizedBuildPipeline(
   skipVulnerabilityScan: true,
   deployCondition: {
     true
-  }
+  },
   deploy: {
     OsTools.runSafe(this, "scripts/deploy_bundle.sh ${params.bundle_number} ${PROJECT_ID} ${API_KEY}")
   },
