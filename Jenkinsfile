@@ -31,7 +31,7 @@ dockerizedBuildPipeline(
     withCredentials([
       string(credentialsId: 'operator-bundle-nxrm-rh-project-id', variable: 'PROJECT_ID'),
       string(credentialsId: 'rh-docker-registry-key', variable: 'KEY')]) {
-      sh "scripts/bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}"
+      runSafely "scripts/bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}"
     }
   },
   skipVulnerabilityScan: true,
@@ -42,7 +42,7 @@ dockerizedBuildPipeline(
     withCredentials([
       string(credentialsId: 'operator-bundle-nxrm-rh-project-id', variable: 'PROJECT_ID'),
       string(credentialsId: 'rh-docker-registry-key', variable: 'KEY')]) {
-      sh "scripts/deploy_bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}"
+      runSafely "scripts/deploy_bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}"
     }
   },
   onSuccess: {
