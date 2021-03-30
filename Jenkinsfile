@@ -5,7 +5,6 @@
  */
 @Library(['private-pipeline-library', 'jenkins-shared', 'int-jenkins-shared']) _
 import com.sonatype.jenkins.pipeline.GitHub
-import com.sonatype.jenkins.pipeline.OsTools
 
 properties([
   parameters([
@@ -32,7 +31,7 @@ dockerizedBuildPipeline(
     withCredentials([
       string(credentialsId: 'operator-bundle-nxrm-rh-project-id', variable: 'PROJECT_ID'),
       string(credentialsId: 'rh-docker-registry-key', variable: 'KEY')]) {
-      OsTools.runSafe(this, "scripts/bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}")
+      sh "scripts/bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}"
     }
   },
   skipVulnerabilityScan: true,
@@ -43,7 +42,7 @@ dockerizedBuildPipeline(
     withCredentials([
       string(credentialsId: 'operator-bundle-nxrm-rh-project-id', variable: 'PROJECT_ID'),
       string(credentialsId: 'rh-docker-registry-key', variable: 'KEY')]) {
-      OsTools.runSafe(this, "scripts/deploy_bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}")
+      sh "scripts/deploy_bundle.sh ${params.bundle_number} ${PROJECT_ID} ${KEY}"
     }
   },
   onSuccess: {
